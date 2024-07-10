@@ -1,0 +1,36 @@
+# Environment variables
+.env
+client/.env
+server/.env
+
+# Dependency folders for package managers
+client/node_modules
+server/node_modules
+
+# Common build artifacts
+docker-compose.yml*  # Ignore all variations of docker-compose.yml (e.g., docker-compose.override.yml)
+docker-compose.yaml
+
+# IDE/Text Editor temporary files
+# Adjust these based on your specific IDE/Text Editor
+.idea/
+.vscode/
+*.sublime-project
+*.sublime-workspace
+*.swo
+
+# Logs
+*.log
+
+# Temporary files
+*.tmp
+
+# Backups
+*.bak
+
+# Text editor configuration files
+*.editorconfig
+
+# OS specific files
+.DS_Store
+Thumbs.db

@@ -13,8 +13,8 @@ export const adminRoute = asyncHandler(
 
       if (!isExist) throw new ApiError("User not found!", 404);
 
-      const isAdmin = process.env.ADMIN_MAILS?.includes(isExist?.email);
-
+      const isAdmin = isExist.role === "ADMIN"
+      
       if (!isAdmin) throw new ApiError(`This is reserve for ADMIN`, 404);
 
       req.user = { ...isExist.toObject(), role: "ADMIN" } as any;

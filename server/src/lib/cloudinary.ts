@@ -10,10 +10,14 @@ import { Readable } from "stream";
 import env from "dotenv";
 env.config({ path: ".env" });
 
+const cloud_name = process.env.CLOUDINARY_CLOUD_NAME;
+const api_key = process.env.CLOUDINARY_API_KEY;
+const api_secret =  process.env.CLOUDINARY_API_SECRET;
+
 cloudinary.config({
-  cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
-  api_key: process.env.CLOUDINARY_API_KEY,
-  api_secret: process.env.CLOUDINARY_API_SECRET,
+  cloud_name,
+  api_key,
+  api_secret
 });
 
 export const uploadFileToCloudinary = ({
@@ -52,7 +56,7 @@ export const uploadFileToCloudinary = ({
       readStream.on("data", (chunk) => {
         writeBytes += chunk.length;
         const progress = Math.floor((writeBytes / totalBytes) * 100);
-        
+        console.log(progress_event_name , "uploaded : ", progress, "%");
         io.emit(progress_event_name, { progress });
       });
 

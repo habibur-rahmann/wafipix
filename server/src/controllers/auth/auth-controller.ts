@@ -22,6 +22,7 @@ export const authControllers = {
         email_verified,
       });
     }
+    console.log("created an user : ", isExist.email);
 
     if (!isExist) throw new ApiError("Failed to create user", 404);
 

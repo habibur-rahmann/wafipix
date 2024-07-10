@@ -1,4 +1,4 @@
-import express from "express";
+import express, { Request, Response } from "express";
 import cors from "cors";
 import { errorHandler } from "../../src/lib/custom-error-handler";
 import NodeCache from "node-cache";
@@ -21,11 +21,17 @@ const app = express();
 export const nodeCache = new NodeCache();
 
 //use cors
-app.use(cors(corsOptions));
+app.use(cors(corsOptions))
 
 // parse application/json
 app.use(express.json());
 app.use(express.text());
+
+
+// hello
+app.get("/", (req: Request, res: Response) => {
+    res.status(200).json({message: "hello from server of wafipix v2."})
+})
 
 // all routes ---------------
 app.use(portfolioRoutes);

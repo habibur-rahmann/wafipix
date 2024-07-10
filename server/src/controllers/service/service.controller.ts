@@ -10,7 +10,6 @@ import {
   removeService,
   updateServiceTexts,
 } from "./service-helper-function";
-import { cache, cacheKeys } from "../../lib/node-cache";
 import { ServiceModel } from "../../models/service.model";
 import { getServiceAggregation } from "./service-aggregation";
 import { getServiceAggregationToView } from "./service-aggregation-to-view";
@@ -23,13 +22,6 @@ import { getServiceAggregationForRelatedServices } from "./service-aggregation-f
 
 export const serviceController = {
   getServices: asyncHandler(async (req: Request, res: Response) => {
-    const cacheKey = `services_${JSON.stringify(req.query)}`;
-
-    // return from cached
-    const cachedPorfolios = cache.get(cacheKey);
-
-    if (cachedPorfolios)
-      return res.status(200).json({ success: true, services: cachedPorfolios });
 
     // find if cache is null
     const services = await ServiceModel.aggregate(
@@ -38,13 +30,6 @@ export const serviceController = {
 
     res.status(200).json({ success: true, services });
 
-    // manage cache after response
-    cacheKeys.storeKeys({
-      nameOfKeys: cacheKeys.getAllServicesKeysKey(),
-      currentKey: cacheKey,
-    });
-
-    cache.set({ key: cacheKey, data: services });
   }),
 
   getService: asyncHandler(async (req: Request, res: Response) => {
@@ -60,14 +45,6 @@ export const serviceController = {
         404
       );
 
-    const cacheKey = `service_${JSON.stringify(req.query)}`;
-
-    // return from cached
-    const cachedPorfolio = cache.get(cacheKey);
-
-    if (cachedPorfolio)
-      return res.status(200).json({ success: true, service: cachedPorfolio });
-
     const service = (
       await ServiceModel.aggregate(
         getServiceAggregation(req, { single: true })
@@ -78,13 +55,6 @@ export const serviceController = {
 
     res.status(200).json({ success: true, service });
 
-    // manage cache after response
-    cacheKeys.storeKeys({
-      nameOfKeys: cacheKeys.getServiceKeysKey(),
-      currentKey: cacheKey,
-    });
-
-    cache.set({ key: cacheKey, data: service });
   }),
 
   getServiceToView: asyncHandler(async (req: Request, res: Response) => {
@@ -154,9 +124,6 @@ export const serviceController = {
     const service = await createInitialService(title);
 
     res.status(201).json({ success: true, service });
-
-    // cache services
-    cache.services.resetAllServices();
   }),
 
   updateService: asyncHandler(async (req: Request, res: Response) => {
@@ -224,8 +191,6 @@ export const serviceController = {
 
     res.status(200).json({ success: true, service: updatedservice });
 
-    // cache services
-    cache.services.resetAllServices();
   }),
 
   deleteService: asyncHandler(async (req: Request, res: Response) => {
@@ -236,8 +201,5 @@ export const serviceController = {
     if (!deletedService) throw new ApiError("Service not found!", 404);
 
     res.status(200).json({ success: true, service: deletedService });
-
-    // cache services
-    cache.services.resetAllServices();
   }),
 };

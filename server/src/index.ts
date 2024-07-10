@@ -9,7 +9,7 @@ const httpServer = http.createServer(app);
 
 export const io = new Server(httpServer, {
   cors: {
-    origin: ["http://localhost:3000", "https://www.wafipix.com", "www.wafipix.com"],
+    origin: ["http://localhost:3000", "http://client:3000", "https://www.wafipix.com", "www.wafipix.com"],
   },
   transports: ["websocket", "polling"],
 });
